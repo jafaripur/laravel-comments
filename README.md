@@ -4,8 +4,6 @@ Persistant, application-wide commenting system for Laravel.
 
 ## Installation
 
-THE PROJECT ALREADY NOT A PACKAGE AND THIS IS JUST IN TEST PROCESS
-
 1. `composer require jafaripur/laravel-comment`
 2. Add `jafaripur\LaravelComments\ServiceProvider` to the array of providers in `config/app.php`.
 3. Publish the config file by running `php artisan vendor:publish` . The config file will give you control over which storage engine to use as well as some storage-specific comments.
