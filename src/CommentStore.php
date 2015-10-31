@@ -85,29 +85,20 @@ abstract class CommentStore {
     /**
      * Read the data from the store.
      *
-     * @param string $namespace unique namespace
-     * @param integer $threadId id of owner
-     * @param integer $approved just read approved or unapproved, (0, 1, null)
-     * @param integer $userId id of user, this can be null
-     * @param integer $parentId id of parent for comment, this can be null
+     * @param \Closure $fieldCallback list of the field will be added to closure
      * 
      * @return array
      */
-    abstract public function read($namespace = null, $threadId = null, $approved = null, $userId = null, $parentId = null);
+    abstract public function read(\Closure $fieldCallback = null);
 
     /**
      * Write the data into the store.
      *
-     * @param string $namespace unique namespace
-     * @param integer $threadId id of owner
-     * @param string $content content of the comment
-     * @param integer $parentId id of parent comment
-     * @param integer $approved just read approved or unapproved, (0, 1)
-     * @param integer $userId id of user, this can be null
+     * @param \Closure $fieldCallback list of the field will be added to closure
      *
      * @return boolean
      */
-    abstract public function save($namespace, $threadId, $content, $parentId = 0, $approved = 0, $userId = null);
+    abstract public function save(\Closure $fieldCallback);
     
     /**
      * @param integer $id id of comment

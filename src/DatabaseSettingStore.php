@@ -64,28 +64,44 @@ class DatabaseSettingStore extends CommentStore {
     /**
      * {@inheritdoc}
      */
-    public function save($namespace, $threadId, $content, $parentId = 0, $approved = 0, $userId = null) {
+    public function save(\Closure $fieldCallback) {
+        
+        $fields = new DatabaseFields();
+        
+        if(is_callable($fieldCallback))
+        {
+            $fieldCallback($fields);
+        }
+        
         return $this->newQuery(true)->insert([
-                    'namespace' => $namespace,
-                    'thread_id' => (int) $threadId,
-                    'approved' => (int) $approved,
-                    'user_id' => (int) $userId,
-                    'parent_id' => (int) $parentId,
-                    'content' => $content,
+                    'namespace' => $fields->namespace,
+                    'thread_id' => (int) $fields->threadId,
+                    'approved' => (int) $fields->approved,
+                    'user_id' => (int) $fields->userId,
+                    'parent_id' => (int) $fields->parentId,
+                    'content' => $fields->content,
         ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function read($namespace = null, $threadId = null, $approved = null, $userId = null, $parentId = null) {
+    public function read(\Closure $fieldCallback = null) {
+        
+        $fields = new DatabaseFields();
+        
+        if(is_callable($fieldCallback))
+        {
+            $fieldCallback($fields);
+        }
+        
         $query = $this->newQuery();
 
-        $query = $this->addWhereQuery($query, 'namespace', '=', $namespace);
-        $query = $this->addWhereQuery($query, 'thread_id', '=', $threadId);
-        $query = $this->addWhereQuery($query, 'approved', '=', $approved);
-        $query = $this->addWhereQuery($query, 'user_id', '=', $userId);
-        $query = $this->addWhereQuery($query, 'parent_id', '=', $parentId);
+        $query = $this->addWhereQuery($query, 'namespace', '=', $fields->namespace);
+        $query = $this->addWhereQuery($query, 'thread_id', '=', $fields->threadId);
+        $query = $this->addWhereQuery($query, 'approved', '=', $fields->approved);
+        $query = $this->addWhereQuery($query, 'user_id', '=', $fields->userId);
+        $query = $this->addWhereQuery($query, 'parent_id', '=', $fields->parentId);
 
         $comments = $query->get();
 

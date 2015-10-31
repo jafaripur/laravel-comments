@@ -15,8 +15,21 @@ You can either access the comments store via its facade or inject it by type-hin
 
 ```php
 <?php
-Comment::read($namespace = null, $threadId = null, $approved = null, $userId = null, $parentId = null);
-Comment::save($namespace, $threadId, $content, $parentId = 0, $approved = 0, $userId = null);
+Comment::read(function($fields) use ($item){
+    $fields->namespace = $item['namespace'];
+    $fields->threadId = $item['thread_id'];
+    $fields->parentId = $item['parent_id'];
+    $fields->approved = $item['approved'];
+    $fields->userId = $item['user_id'];
+});
+Comment::save(function($fields) use ($item){
+    $fields->namespace = $item['namespace'];
+    $fields->threadId = $item['thread_id'];
+    $fields->content = $item['content'];
+    $fields->parentId = $item['parent_id'];
+    $fields->approved = $item['approved'];
+    $fields->userId = $item['user_id'];
+});
 Comment::delete($id);
 Comment::approve($id);
 Comment::unapprove($id);

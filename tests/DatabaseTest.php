@@ -41,7 +41,14 @@ class DatabaseTest extends AbstractFunctionalTest {
             $store = $this->createStore();
             foreach($data as $item)
             {
-                $store->save($item['namespace'], $item['thread_id'], $item['content'], $item['parent_id'], $item['approved'], $item['user_id']);
+                $store->save(function($fields) use ($item){
+                    $fields->namespace = $item['namespace'];
+                    $fields->threadId = $item['thread_id'];
+                    $fields->content = $item['content'];
+                    $fields->parentId = $item['parent_id'];
+                    $fields->approved = $item['approved'];
+                    $fields->userId = $item['user_id'];
+                });
             }
             unset($store);
         }
