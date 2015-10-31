@@ -1,7 +1,7 @@
 {
     "name": "jafaripur/laravel-comment",
     "description": "Commenting system in laravel",
-    "license": "MIT",
+    "license": "Apache2",
     "authors": [
         {
             "name": "Araz Jafaripur",
@@ -9,16 +9,14 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
-        "illuminate/support": ">=4.1 <6.0"
+        "php": ">=5.4.0",
+        "illuminate/support": ">=5.0 <6.0"
     },
     "suggest": {
-        "illuminate/database": "Save settings to a database table."
+        "illuminate/database": "Save comments to a database table."
     },
     "require-dev": {
-        "mockery/mockery": "0.9.*",
-        "illuminate/database": ">=4.1 <6.0",
-        "illuminate/filesystem": ">=4.1 <6.0"
+        "illuminate/database": ">=5.0 <6.0"
     },
     "autoload": {
         "psr-4": {
