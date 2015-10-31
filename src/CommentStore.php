@@ -17,17 +17,15 @@ abstract class CommentStore {
      * @param boolean $addChildToParent add child to parent items
      * @return array array of comment object
      */
-    public function prepareComments($comments, $addChildToParent = true) {
-        if (!$addChildToParent)
-        {
+    public function prepareComments($comments, $addChildToParent) {
+        if (!$addChildToParent) {
             return $comments;
         }
-        
+
         $newComments = [];
         foreach ($comments as $comment) {
-            if (is_object($comment))
-            {
-                $comment = (array)$comment;
+            if (is_object($comment)) {
+                $comment = (array) $comment;
             }
             $comment['childs'] = [];
             $newComments[$comment['id']] = $comment;
@@ -67,29 +65,43 @@ abstract class CommentStore {
                 unset($newComments[$k]);
             }
         }
-        
+
         return $newComments;
-        
     }
-    
+
     // now we display the comments list, this is a basic recursive function
     public function displayComments($comments, $level = 0) {
-      foreach ($comments as $comment) {
-        echo str_repeat('-', $level + 1).' comment '.$comment->id."\n";
-        if (!empty($comment['childs'])) {
-          $this->displayComments($comment['childs'], $level + 1);
+        foreach ($comments as $comment) {
+            echo str_repeat('-', $level + 1) . ' comment ' . $comment->id . "\n";
+            if (!empty($comment['childs'])) {
+                $this->displayComments($comment['childs'], $level + 1);
+            }
         }
-      }
     }
-    
+
+    /**
+     * Convert camel case to underscore string
+     * 
+     * @param string $input
+     * @return string
+     */
+    public function camelCaseToUnderscore($input) {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
+
     /**
      * Read the data from the store.
      *
-     * @param \Closure $fieldCallback list of the field will be added to closure
+     * @param \Closure $fieldCallback list of the field will be added to closure for adding condition
      * 
      * @return array
      */
-    abstract public function read(\Closure $fieldCallback = null);
+    abstract public function read(\Closure $fieldCallback = null, $addChildToParent = true);
 
     /**
      * Write the data into the store.
@@ -99,21 +111,21 @@ abstract class CommentStore {
      * @return boolean
      */
     abstract public function save(\Closure $fieldCallback);
-    
+
     /**
      * @param integer $id id of comment
      * 
      * @return boolean
      */
     abstract public function delete($id);
-    
+
     /**
      * @param integer $id id of comment
      * 
      * @return boolean
      */
     abstract public function approve($id);
-    
+
     /**
      * @param integer $id id of comment
      * 

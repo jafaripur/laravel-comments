@@ -73,20 +73,19 @@ class DatabaseSettingStore extends CommentStore {
             $fieldCallback($fields);
         }
         
-        return $this->newQuery(true)->insert([
-                    'namespace' => $fields->namespace,
-                    'thread_id' => (int) $fields->threadId,
-                    'approved' => (int) $fields->approved,
-                    'user_id' => (int) $fields->userId,
-                    'parent_id' => (int) $fields->parentId,
-                    'content' => $fields->content,
-        ]);
+        $data = [];
+        foreach($fields as $key => $value)
+        {
+            $data[$this->camelCaseToUnderscore($key)] = $value;
+        }
+        
+        return $this->newQuery(true)->insert($data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function read(\Closure $fieldCallback = null) {
+    public function read(\Closure $fieldCallback = null, $addChildToParent = true) {
         
         $fields = new DatabaseFields();
         
@@ -97,11 +96,10 @@ class DatabaseSettingStore extends CommentStore {
         
         $query = $this->newQuery();
 
-        $query = $this->addWhereQuery($query, 'namespace', '=', $fields->namespace);
-        $query = $this->addWhereQuery($query, 'thread_id', '=', $fields->threadId);
-        $query = $this->addWhereQuery($query, 'approved', '=', $fields->approved);
-        $query = $this->addWhereQuery($query, 'user_id', '=', $fields->userId);
-        $query = $this->addWhereQuery($query, 'parent_id', '=', $fields->parentId);
+        foreach($fields as $key => $value)
+        {
+            $query = $this->addWhereQuery($query, $this->camelCaseToUnderscore($key), '=', $value);
+        }
 
         $comments = $query->get();
 
@@ -109,7 +107,7 @@ class DatabaseSettingStore extends CommentStore {
             $comments = $comments->toArray();
         }
 
-        return $this->prepareComments($comments);
+        return $this->prepareComments($comments, $addChildToParent);
     }
 
     /**

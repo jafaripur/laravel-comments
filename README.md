@@ -13,6 +13,8 @@ Persistant, application-wide commenting system for Laravel.
 
 You can either access the comments store via its facade or inject it by type-hinting towards the abstract class `jafaripur\LaravelComments\CommentStore`.
 
+The read function Closure give field list which want to add to query condition.
+
 ```php
 <?php
 Comment::read(function($fields) use ($item){
