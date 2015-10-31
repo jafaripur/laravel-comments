@@ -16,9 +16,7 @@ abstract class AbstractFunctionalTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(count($data), count($comments));
         
         echo count($data)." Comment successfully inserted\n";
-        
-        
-        //$this->assertStoreEquals($store, array('foo' => array('bar' => 'baz')));
+
     }
     
     /** @test */
@@ -36,8 +34,7 @@ abstract class AbstractFunctionalTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($count, count($comments));
         
         echo "{$count} Comment successfully deleted.\n";
-        
-        //$this->assertStoreEquals($store, array('foo' => array('bar' => 'baz')));
+
     }
     
     /** @test */
@@ -64,7 +61,6 @@ abstract class AbstractFunctionalTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($approved + $unapproved, count($comments));
         
         echo "{$approved} Comment approved and {$unapproved} comment unapproved.\n";
-        
-        //$this->assertStoreEquals($store, array('foo' => array('bar' => 'baz')));
+
     }
 }
